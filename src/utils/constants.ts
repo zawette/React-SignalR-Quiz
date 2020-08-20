@@ -1,0 +1,1 @@
+export let steps = { GAME_TITLE: 0, WAITING_FOR_PLAYERS: 1, PLAYING_GAME:2, GAME_OVER: 3 };

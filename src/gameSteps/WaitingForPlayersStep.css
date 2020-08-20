@@ -1,0 +1,13 @@
+.waitingForPlayersStep {
+
+}
+.waitingForPlayersStep .waitingText {
+  margin-top: 3.5rem;
+  color: white;
+}
+
+.waitingForPlayersStep .submitNameBtn{
+    margin-top: 1rem;
+    height: 3rem;
+    width: 6rem;
+}
