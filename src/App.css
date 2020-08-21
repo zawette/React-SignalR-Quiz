@@ -2,18 +2,3 @@
   width: 80%;
   margin: 2rem;
 }
-.App div.Title{
-  font-size: 35px;
-  margin-bottom: 5rem;
-  color: azure;
-}
-
-.nbrOfPlayersbtnContainer{
-  display: grid;
-  grid-template-columns: repeat(2,1fr);
-  gap: 1rem;
-  
-}
-.nbrOfPlayersBtn{
-  height: 5rem;
-}
