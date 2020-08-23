@@ -16,3 +16,22 @@
   margin-bottom: 3rem;
   color: azure;
 }
+
+.quizContainer .progressBarContainer{
+	height: 1.5rem;
+	background: #6E7170;
+	border-radius: 25px;
+  padding: 0.7rem;
+  margin-bottom: 2rem;
+}
+
+.quizContainer .progressBarContainer .progressDots{
+  display: block;
+  height: 100%;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  background-color: #48A9A6;
+  transition: width 1s linear;
+}

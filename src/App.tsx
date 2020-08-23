@@ -19,7 +19,6 @@ function App() {
       return prevObject;
     });
   };
-  //refractor Gametitle step into a seperate file in the gameStepsFolder
   const Rendergame = () => {
     switch (step) {
       case steps.GAME_TITLE:
@@ -41,13 +40,7 @@ function App() {
         return (
           <Quiz
             setStep={(step: number) => setStep(step)}
-            Question="who is the hmar"
-            answers={[
-              "Elit dolore incididunt sunt consectetur eiusmod voluptate cupidatat culpa laboris do exercitation in tempor consequat.",
-              "fuk2",
-              "fuk3",
-              "fuk4"
-            ]}
+            data={[{question:"who did dat?",answers:["Ad dolore ipsum eu culpa sit amet aliquip voluptate.","Cillum nisi irure amet nulla amet esse.","sadasd a"]}]}
           />
         );
 
