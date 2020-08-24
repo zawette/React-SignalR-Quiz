@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { HubConnectionBuilder } from "@microsoft/signalr";
 import "./App.css";
 import { steps } from "./utils/constants";
 import WaitingForPlayersStep from "./gameSteps/WaitingForPlayersStep";
@@ -6,12 +7,21 @@ import Quiz from "./gameSteps/Quiz";
 import GameTitleStep from "./gameSteps/GameTitleStep";
 
 function App() {
-  let [step, setStep] = useState(steps.GAME_TITLE);
-  let [numberOfPlayers, setNumberOfPlayers] = useState(1);
-  let [players, setPlayers] = useState<{ [key: string]: number } | null>({});
+  const [step, setStep] = useState(steps.GAME_TITLE);
+  const [MaxPlayers, setMaxPlayers] = useState(1);
+  const [players, setPlayers] = useState<{ [key: string]: number } | null>({});
+  const [hubConnection, setHubConnection] = useState(
+    new HubConnectionBuilder()
+      .withUrl(`http://8c634f554781.ngrok.io/QuizHub`)
+      .build()
+  );
+
+
   const ReadyGame = (numberOfPlayer: number) => {
-    setNumberOfPlayers(numberOfPlayer);
-    setStep(steps.WAITING_FOR_PLAYERS);
+    setMaxPlayers(numberOfPlayer);
+    hubConnection
+      .invoke("ConfigGame", "fr", "culturegenerale", "débutant", numberOfPlayer)
+      .catch(err => console.log(err));
   };
   const addPlayer = (playerName: string) => {
     setPlayers(prevObject => {
@@ -19,6 +29,20 @@ function App() {
       return prevObject;
     });
   };
+
+  useEffect(() => {
+    hubConnection
+      .start()
+      .then(() => {
+        console.log("connection started");
+        hubConnection.on("gameConfigured",(r)=>{
+            setMaxPlayers(r.MaxPlayers);
+            setStep(steps.WAITING_FOR_PLAYERS);
+        })
+      })
+      .catch(err => console.log(err));
+  }, []);
+
   const Rendergame = () => {
     switch (step) {
       case steps.GAME_TITLE:
@@ -40,7 +64,16 @@ function App() {
         return (
           <Quiz
             setStep={(step: number) => setStep(step)}
-            data={[{question:"who did dat?",answers:["Ad dolore ipsum eu culpa sit amet aliquip voluptate.","Cillum nisi irure amet nulla amet esse.","sadasd a"]}]}
+            data={[
+              {
+                question: "who did dat?",
+                answers: [
+                  "Ad dolore ipsum eu culpa sit amet aliquip voluptate.",
+                  "Cillum nisi irure amet nulla amet esse.",
+                  "sadasd a"
+                ]
+              }
+            ]}
           />
         );
 
