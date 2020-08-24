@@ -24,6 +24,7 @@ function App() {
       .catch(err => console.log(err));
   };
   const addPlayer = (playerName: string) => {
+    hubConnection.invoke("Join",playerName).then(_=>console.log("it worked")).catch(err=>console.log(err));
     setPlayers(prevObject => {
       prevObject![playerName] = 0;
       return prevObject;
@@ -38,7 +39,14 @@ function App() {
         hubConnection.on("gameConfigured",(r)=>{
             setMaxPlayers(r.MaxPlayers);
             setStep(steps.WAITING_FOR_PLAYERS);
-        })
+        });
+        // PROBLEM HERE
+        hubConnection.on("Join",(r)=>{
+          console.log(r.name)
+          setPlayers(r.name);
+          if(players!.length===MaxPlayers)
+            setStep(steps.PLAYING_GAME);
+      });
       })
       .catch(err => console.log(err));
   }, []);

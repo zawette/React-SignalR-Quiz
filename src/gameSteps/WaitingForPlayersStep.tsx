@@ -11,7 +11,6 @@ function WaitingForPlayers(props: Props) {
     const playerNameRef = useRef<HTMLInputElement>(null);
     const addPlayer=(name:string)=>{
         props.addPlayer(name);
-        props.setStep(steps.PLAYING_GAME);
     }
     
 
