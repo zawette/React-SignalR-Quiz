@@ -52,9 +52,6 @@ function App() {
       .catch(err => console.log(err));
   }, []);
 
-  useEffect(()=>{
-
-  },[MaxPlayers])
 
   const Rendergame = () => {
     switch (step) {
@@ -72,6 +69,7 @@ function App() {
             setStep={(step: number) => setStep(step)}
             players={players}
             MaxPlayers={MaxPlayers}
+            HubConnection={hubConnection}
           />
         );
 
