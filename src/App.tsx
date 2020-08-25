@@ -10,25 +10,27 @@ function App() {
   const [step, setStep] = useState(steps.GAME_TITLE);
   const [MaxPlayers, setMaxPlayers] = useState(1);
   const [players, setPlayers] = useState<{ [key: string]: number } | null>({});
+  const [currentPlayer, setCurrentPlayer] = useState("");
   const [hubConnection, setHubConnection] = useState(
     new HubConnectionBuilder()
-      .withUrl(`http://8c634f554781.ngrok.io/QuizHub`)
+      .withUrl(`http://9aa062853ff1.ngrok.io/QuizHub`)
       .build()
   );
 
-
-  const ReadyGame = (numberOfPlayer: number) => {
-    setMaxPlayers(numberOfPlayer);
+  const ReadyGame = (numberOfPlayers: number) => {
     hubConnection
-      .invoke("ConfigGame", "fr", "culturegenerale", "débutant", numberOfPlayer)
+      .invoke(
+        "ConfigGame",
+        "fr",
+        "culturegenerale",
+        "débutant",
+        numberOfPlayers
+      )
       .catch(err => console.log(err));
   };
   const addPlayer = (playerName: string) => {
-    hubConnection.invoke("Join",playerName).then(_=>console.log("it worked")).catch(err=>console.log(err));
-    setPlayers(prevObject => {
-      prevObject![playerName] = 0;
-      return prevObject;
-    });
+    hubConnection.invoke("Join", playerName).catch(err => console.log(err));
+    setCurrentPlayer(playerName);
   };
 
   useEffect(() => {
@@ -36,20 +38,23 @@ function App() {
       .start()
       .then(() => {
         console.log("connection started");
-        hubConnection.on("gameConfigured",(r)=>{
-            setMaxPlayers(r.MaxPlayers);
-            setStep(steps.WAITING_FOR_PLAYERS);
+        hubConnection.on("gameConfigured", r => {
+          setMaxPlayers(r.maxPlayers);
+          setStep(steps.WAITING_FOR_PLAYERS);
         });
-        // PROBLEM HERE
-        hubConnection.on("Join",(r)=>{
-          console.log(r.name)
-          setPlayers(r.name);
-          if(players!.length===MaxPlayers)
-            setStep(steps.PLAYING_GAME);
-      });
+        hubConnection.on("PlayerJoined", r => {
+          setPlayers(prevObject => {
+            prevObject![r.name] = 0;
+            return prevObject;
+          });
+        });
       })
       .catch(err => console.log(err));
   }, []);
+
+  useEffect(()=>{
+
+  },[MaxPlayers])
 
   const Rendergame = () => {
     switch (step) {
@@ -65,6 +70,8 @@ function App() {
           <WaitingForPlayersStep
             addPlayer={name => addPlayer(name)}
             setStep={(step: number) => setStep(step)}
+            players={players}
+            MaxPlayers={MaxPlayers}
           />
         );
 
