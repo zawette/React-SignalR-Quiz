@@ -14,13 +14,15 @@ interface Props {
 function WaitingForPlayers(props: Props) {
   const playerNameRef = useRef<HTMLInputElement>(null);
   const [nbPlayers,setNbPlayers] = useState(0);
+  const [disableBtn,setDisableBtn] = useState(false);
   const addPlayer = (name: string) => {
     props.addPlayer(name);
+    setDisableBtn(true);
   };
 
   useEffect(() => {
     if (nbPlayers === props.MaxPlayers) {
-      props.setStep(steps.PLAYING_GAME);
+      props.setStep(steps.PRE_GAME);
     }
   }, [nbPlayers]);
 
@@ -43,7 +45,8 @@ function WaitingForPlayers(props: Props) {
         <br />
         <button
           className="submitNameBtn"
-          onClick={() => addPlayer(playerNameRef.current!.value)}
+          onClick={(e) => addPlayer(playerNameRef.current!.value)}
+          disabled={disableBtn}
         >
           submit
         </button>

@@ -5,15 +5,20 @@ import { steps } from "./utils/constants";
 import WaitingForPlayersStep from "./gameSteps/WaitingForPlayersStep";
 import Quiz from "./gameSteps/Quiz";
 import GameTitleStep from "./gameSteps/GameTitleStep";
+import PreGamePlay from "./gameSteps/preGamePlay";
 
+//maybe put maxplayers, maxquestions in one gameconfig var
 function App() {
   const [step, setStep] = useState(steps.GAME_TITLE);
   const [MaxPlayers, setMaxPlayers] = useState(1);
+  const [MaxQuestions,setMaxQuestions]=useState(1)
+  const [quizData,setQuizData]=useState()
+  const [currentQuestionIndex,setCurrentQuestionIndex]=useState(0);
   const [players, setPlayers] = useState<{ [key: string]: number } | null>({});
   const [currentPlayer, setCurrentPlayer] = useState("");
   const [hubConnection, setHubConnection] = useState(
     new HubConnectionBuilder()
-      .withUrl(`http://9aa062853ff1.ngrok.io/QuizHub`)
+      .withUrl(`http://e9f2a2eb2025.ngrok.io/QuizHub`)
       .build()
   );
 
@@ -40,6 +45,7 @@ function App() {
         console.log("connection started");
         hubConnection.on("gameConfigured", r => {
           setMaxPlayers(r.maxPlayers);
+          setMaxQuestions(r.maxQuestions)
           setStep(steps.WAITING_FOR_PLAYERS);
         });
         hubConnection.on("PlayerJoined", r => {
@@ -72,6 +78,18 @@ function App() {
             HubConnection={hubConnection}
           />
         );
+
+        case steps.PRE_GAME:
+          return (
+            <PreGamePlay
+              setStep={(step: number) => setStep(step)}
+              currentPlayer={currentPlayer}
+              MaxPlayers={MaxPlayers}
+              HubConnection={hubConnection}
+              currentQuestionIndex={currentQuestionIndex}
+              setCurrentQuestionIndex={(index:number)=>setCurrentQuestionIndex(index)}
+            />
+          );
 
       case steps.PLAYING_GAME:
         return (
