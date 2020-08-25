@@ -14,6 +14,7 @@ interface Props {
   currentQuestionIndex: number;
   setQuizData: (quizData: any) => any;
   quizData:IquizData | null;
+  setPlayers:(callbackOrObj:any)=>any;
   
 }
 
@@ -31,6 +32,13 @@ function PreGamePlay(props: Props) {
         props.setCurrentQuestionIndex(props.currentQuestionIndex + 1);
       }
     );
+    props.HubConnection.on("winnerName", r => {
+        props.setPlayers((prevObject: any)=>{
+            prevObject![r.playerName] =prevObject![r.playerName]+1 ;
+            return prevObject;
+        })
+
+    });
     props.HubConnection.on("NewQuestion", r => {
       props.setQuizData(r);
     });

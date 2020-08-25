@@ -86,6 +86,7 @@ function App() {
             setStep={(step: number) => setStep(step)}
             players={players}
             currentPlayer={currentPlayer}
+            setPlayers={(callbackOrObj)=>setPlayers(callbackOrObj)}
             MaxPlayers={MaxPlayers}
             HubConnection={hubConnection}
             currentQuestionIndex={currentQuestionIndex}
@@ -102,14 +103,15 @@ function App() {
           <Quiz
             setStep={(step: number) => setStep(step)}
             currentPlayer={currentPlayer}
-            data={[
+            HubConnection={hubConnection}
+            data={
               {
                 question: quizData!.question,
                 propositions: quizData!.propositions,
                 answer:quizData!.answer,
                 anecdote:quizData!.anecdote
               }
-            ]}
+            }
           />
         );
 

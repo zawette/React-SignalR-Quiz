@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Quiz.css";
 import Collapse from "react-zaw-collapse";
 import { steps } from "../utils/constants";
+import { HubConnection } from "@microsoft/signalr";
 
 interface Props {
   data: {
@@ -9,16 +10,27 @@ interface Props {
     answer: string;
     anecdote: string;
     propositions: string[];
-  }[];
+  };
   setStep: (step: number) => any;
   currentPlayer: string;
+  HubConnection:HubConnection;
 }
 
 function Quiz(props: Props) {
+  const [disableBtn,setDisableBtn]=useState(false);
   const [seconds, setSeconds] = useState(10);
   const meterPercentage = (seconds / 10) * 100;
-  let possibleAnswers = props.data[0].propositions.map(proposition => (
-    <button className="quizAnswerBtn" key={proposition} value={proposition}>
+
+  const answerQuiz=(answer:string)=>{
+    setDisableBtn(true);
+    if(answer===props.data!.answer){
+      props.HubConnection.invoke("AddScoreTo",props.currentPlayer);
+    }
+  }
+
+
+  let possibleAnswers = props.data.propositions.map(proposition => (
+    <button className="quizAnswerBtn" disabled={disableBtn} key={proposition} value={proposition} onClick={(e)=>answerQuiz(e.currentTarget.value ) }>
       {proposition}
     </button>
   ));
@@ -43,7 +55,7 @@ function Quiz(props: Props) {
           style={{ width: `${meterPercentage}%` }}
         ></span>
       </div>
-      <div className="question">{props.data[0].question} </div>
+      <div className="question">{props.data.question} </div>
       <div className="answersContainer">{possibleAnswers}</div>
     </div>
   );
