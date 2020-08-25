@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { HubConnection } from "@microsoft/signalr";
 import "./preGamePlay.css";
+import { IquizData, steps, shuffleArray } from "../utils/constants";
+
 
 interface Props {
   currentPlayer: string;
@@ -9,23 +11,18 @@ interface Props {
   MaxPlayers: number;
   HubConnection: HubConnection;
   currentQuestionIndex: number;
-  setQuizData:(quizData:any)=>any;
-  quizData: {
-    question: string;
-    propositions: string[];
-    answer: string;
-    anecdote: string;
-  } | null;
+  setQuizData: (quizData: any) => any;
+  quizData:IquizData | null;
 }
 
 function PreGamePlay(props: Props) {
-    const fakeAnswerRef = useRef<HTMLInputElement>(null);
-    const [fakeAnswersNb,setFakeAnswersNb] = useState(0);
-    const [disableBtn,setDisableBtn]=useState(false);
-    const addFakeAnswer= (fakeAnswer:string)=>{
-        setDisableBtn(true);
-        props.HubConnection.invoke("sendFakeAnswer",fakeAnswer)
-    }
+  const fakeAnswerRef = useRef<HTMLInputElement>(null);
+  const [fakeAnswersNb, setFakeAnswersNb] = useState(0);
+  const [disableBtn, setDisableBtn] = useState(false);
+  const addFakeAnswer = (fakeAnswer: string) => {
+    setDisableBtn(true);
+    props.HubConnection.invoke("sendFakeAnswer", fakeAnswer);
+  };
   useEffect(() => {
     props.HubConnection.invoke("GetQuestion", props.currentQuestionIndex).then(
       () => {
@@ -36,23 +33,48 @@ function PreGamePlay(props: Props) {
       props.setQuizData(r);
     });
     props.HubConnection.on("receiveFakeAnswer", r => {
-        // todo: push fake answer to propositions and setStep to gameplay if all player fileld the form
-        setFakeAnswersNb((oldValue)=>oldValue+1)
-        console.log(r);
+      setFakeAnswersNb(oldValue => oldValue + 1);
+      props.setQuizData(
+        (oldValue:IquizData) => {
+          oldValue.propositions.push(r.fakeAnswer);
+          shuffleArray(oldValue.propositions)
+          return oldValue;
+        }
+      );
     });
   }, []);
 
-  return <div className="preGamePlayContainer">
-      <div className="Question">
-          {props.quizData!.question}
-      </div>
-      <input type="text" name="fakeAnswer" className="fakeAnswer"ref={fakeAnswerRef} placeholder="fake Answer" />
-      <br/>
-      <button className="submitBtn" disabled={disableBtn} onClick={()=>addFakeAnswer(fakeAnswerRef.current!.value)}> Submit</button>
+
+  useEffect(()=>{
+    if (fakeAnswersNb === props.MaxPlayers) {
+        props.setStep(steps.PLAYING_GAME);
+      }
+  },[fakeAnswersNb])
+
+  return (
+    <div className="preGamePlayContainer">
+      <div className="Question">{props.quizData!.question}</div>
+      <input
+        type="text"
+        name="fakeAnswer"
+        className="fakeAnswer"
+        ref={fakeAnswerRef}
+        placeholder="fake Answer"
+      />
+      <br />
+      <button
+        className="submitBtn"
+        disabled={disableBtn}
+        onClick={() => addFakeAnswer(fakeAnswerRef.current!.value)}
+      >
+        {" "}
+        Submit
+      </button>
       <div className="waitingText">
-          waiting for{props.MaxPlayers-fakeAnswersNb} players 
+        waiting for{props.MaxPlayers - fakeAnswersNb} players
       </div>
-  </div>;
+    </div>
+  );
 }
 
 export default PreGamePlay;

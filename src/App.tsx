@@ -6,18 +6,15 @@ import WaitingForPlayersStep from "./gameSteps/WaitingForPlayersStep";
 import Quiz from "./gameSteps/Quiz";
 import GameTitleStep from "./gameSteps/GameTitleStep";
 import PreGamePlay from "./gameSteps/preGamePlay";
+import { IquizData } from "./utils/constants";
+
 
 //maybe put maxplayers, maxquestions in one gameconfig var
 function App() {
   const [step, setStep] = useState(steps.GAME_TITLE);
   const [MaxPlayers, setMaxPlayers] = useState(1);
   const [MaxQuestions, setMaxQuestions] = useState(1);
-  const [quizData, setQuizData] = useState<{
-    question: string;
-    propositions: string[];
-    answer: string;
-    anecdote: string;
-  } | null>({question:"",propositions:[""],answer:"",anecdote:""});
+  const [quizData, setQuizData] = useState<IquizData | null>({question:"",propositions:[""],answer:"",anecdote:""});
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [players, setPlayers] = useState<{ [key: string]: number } | null>({});
   const [currentPlayer, setCurrentPlayer] = useState("");
@@ -105,12 +102,8 @@ function App() {
             setStep={(step: number) => setStep(step)}
             data={[
               {
-                question: "who did dat?",
-                answers: [
-                  "Ad dolore ipsum eu culpa sit amet aliquip voluptate.",
-                  "Cillum nisi irure amet nulla amet esse.",
-                  "sadasd a"
-                ]
+                question: quizData!.question,
+                answers: quizData!.propositions
               }
             ]}
           />
