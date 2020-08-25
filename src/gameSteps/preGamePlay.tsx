@@ -6,6 +6,7 @@ import { IquizData, steps, shuffleArray } from "../utils/constants";
 
 interface Props {
   currentPlayer: string;
+  players: { [key: string]: number } | null;
   setStep: (step: number) => any;
   setCurrentQuestionIndex: (index: number) => any;
   MaxPlayers: number;
@@ -13,6 +14,7 @@ interface Props {
   currentQuestionIndex: number;
   setQuizData: (quizData: any) => any;
   quizData:IquizData | null;
+  
 }
 
 function PreGamePlay(props: Props) {
@@ -72,6 +74,10 @@ function PreGamePlay(props: Props) {
       </button>
       <div className="waitingText">
         waiting for{props.MaxPlayers - fakeAnswersNb} players
+      </div>
+      <div className="playerScore">
+          Score
+      {Object.keys(props.players!).map(p=><div key={p}>{p} : {props.players![p]} Points </div>)}
       </div>
     </div>
   );

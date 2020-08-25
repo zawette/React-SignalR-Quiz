@@ -9,10 +9,11 @@
   color: #fcfcff;
   background-color: #957186;
   border: none;
+  min-height: 3rem;
 }
 
 .quizContainer div.question {
-  font-size: 35px;
+  font-size: 30px;
   margin-bottom: 3rem;
   color: azure;
 }

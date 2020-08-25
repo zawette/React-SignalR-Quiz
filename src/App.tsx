@@ -84,6 +84,7 @@ function App() {
         return (
           <PreGamePlay
             setStep={(step: number) => setStep(step)}
+            players={players}
             currentPlayer={currentPlayer}
             MaxPlayers={MaxPlayers}
             HubConnection={hubConnection}
@@ -100,10 +101,13 @@ function App() {
         return (
           <Quiz
             setStep={(step: number) => setStep(step)}
+            currentPlayer={currentPlayer}
             data={[
               {
                 question: quizData!.question,
-                answers: quizData!.propositions
+                propositions: quizData!.propositions,
+                answer:quizData!.answer,
+                anecdote:quizData!.anecdote
               }
             ]}
           />
