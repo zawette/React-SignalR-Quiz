@@ -1,0 +1,20 @@
+.preGamePlayContainer .Question{
+    font-size: 30px;
+    margin-bottom: 5rem;
+    color: azure;
+}
+
+.preGamePlayContainer .submitBtn{
+    margin-top: 1rem;
+    height: 3rem;
+    width: 6rem;
+}
+
+.preGamePlayContainer .fakeAnswer{
+    height: 2rem;
+}
+
+.preGamePlayContainer .waitingText{
+    margin-top: 2rem;
+    color:azure;
+}

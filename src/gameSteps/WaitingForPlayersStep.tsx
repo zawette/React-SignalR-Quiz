@@ -45,7 +45,7 @@ function WaitingForPlayers(props: Props) {
         <br />
         <button
           className="submitNameBtn"
-          onClick={(e) => addPlayer(playerNameRef.current!.value)}
+          onClick={() => addPlayer(playerNameRef.current!.value)}
           disabled={disableBtn}
         >
           submit

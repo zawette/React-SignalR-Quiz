@@ -11,9 +11,14 @@ import PreGamePlay from "./gameSteps/preGamePlay";
 function App() {
   const [step, setStep] = useState(steps.GAME_TITLE);
   const [MaxPlayers, setMaxPlayers] = useState(1);
-  const [MaxQuestions,setMaxQuestions]=useState(1)
-  const [quizData,setQuizData]=useState()
-  const [currentQuestionIndex,setCurrentQuestionIndex]=useState(0);
+  const [MaxQuestions, setMaxQuestions] = useState(1);
+  const [quizData, setQuizData] = useState<{
+    question: string;
+    propositions: string[];
+    answer: string;
+    anecdote: string;
+  } | null>({question:"",propositions:[""],answer:"",anecdote:""});
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [players, setPlayers] = useState<{ [key: string]: number } | null>({});
   const [currentPlayer, setCurrentPlayer] = useState("");
   const [hubConnection, setHubConnection] = useState(
@@ -45,7 +50,7 @@ function App() {
         console.log("connection started");
         hubConnection.on("gameConfigured", r => {
           setMaxPlayers(r.maxPlayers);
-          setMaxQuestions(r.maxQuestions)
+          setMaxQuestions(r.maxQuestions);
           setStep(steps.WAITING_FOR_PLAYERS);
         });
         hubConnection.on("PlayerJoined", r => {
@@ -57,7 +62,6 @@ function App() {
       })
       .catch(err => console.log(err));
   }, []);
-
 
   const Rendergame = () => {
     switch (step) {
@@ -79,17 +83,21 @@ function App() {
           />
         );
 
-        case steps.PRE_GAME:
-          return (
-            <PreGamePlay
-              setStep={(step: number) => setStep(step)}
-              currentPlayer={currentPlayer}
-              MaxPlayers={MaxPlayers}
-              HubConnection={hubConnection}
-              currentQuestionIndex={currentQuestionIndex}
-              setCurrentQuestionIndex={(index:number)=>setCurrentQuestionIndex(index)}
-            />
-          );
+      case steps.PRE_GAME:
+        return (
+          <PreGamePlay
+            setStep={(step: number) => setStep(step)}
+            currentPlayer={currentPlayer}
+            MaxPlayers={MaxPlayers}
+            HubConnection={hubConnection}
+            currentQuestionIndex={currentQuestionIndex}
+            setCurrentQuestionIndex={(index: number) =>
+              setCurrentQuestionIndex(index)
+            }
+            setQuizData={(quizData) => setQuizData(quizData)}
+            quizData={quizData!}
+          />
+        );
 
       case steps.PLAYING_GAME:
         return (
