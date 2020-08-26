@@ -4,12 +4,25 @@
     color: azure;
   }
   
-  .nbrOfPlayersbtnContainer{
+  .gameTitleContainer .nbrOfPlayersbtnContainer{
     display: grid;
     grid-template-columns: repeat(2,1fr);
     gap: 1rem;
     
   }
-  .nbrOfPlayersBtn{
-    height: 5rem;
+  .gameTitleContainer .nbrOfPlayersbtnContainer .nbrOfPlayersBtn{
+    min-height: 5rem;
+    background-color: #957186;
+    color: azure;
   }
+
+  .gameTitleContainer .configuration{
+    margin-top: 2rem;
+}
+
+
+.gameTitleContainer .configuration .content select{
+  min-width: 25%;
+  margin-right: 60%;
+  float: right;
+}

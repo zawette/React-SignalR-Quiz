@@ -24,13 +24,13 @@ function App() {
       .build()
   );
 
-  const ReadyGame = (numberOfPlayers: number) => {
+  const ReadyGame = (numberOfPlayers: number,lang:string,difficulty:string,quiz:string) => {
     hubConnection
       .invoke(
         "ConfigGame",
-        "fr",
-        "culturegenerale",
-        "débutant",
+        lang,
+        quiz,
+        difficulty,
         numberOfPlayers
       )
       .catch(err => console.log(err));
@@ -62,7 +62,7 @@ function App() {
 
 useEffect(()=>{
 if(currentQuestionIndex===MaxQuestions)
-setStep(steps.GAME_OVER)
+setStep(steps.GAME_TITLE)
 },[currentQuestionIndex])
 
   const Rendergame = () => {
@@ -70,7 +70,7 @@ setStep(steps.GAME_OVER)
       case steps.GAME_TITLE:
         return (
           <GameTitleStep
-            ReadyGame={numberOfPlayer => ReadyGame(numberOfPlayer)}
+            ReadyGame={(numberOfPlayers,lang,difficulty,quiz) => ReadyGame(numberOfPlayers,lang,difficulty,quiz)}
           />
         );
 
@@ -119,9 +119,6 @@ setStep(steps.GAME_OVER)
             }
           />
         );
-
-      case steps.GAME_OVER:
-        return <div style={{color:"white"}}>GameOver</div>;
     }
   };
 

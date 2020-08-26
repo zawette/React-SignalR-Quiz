@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./Quiz.css";
-import Collapse from "react-zaw-collapse";
 import { steps } from "../utils/constants";
 import { HubConnection } from "@microsoft/signalr";
 
