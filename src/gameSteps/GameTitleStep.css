@@ -21,8 +21,10 @@
 }
 
 
-.gameTitleContainer .configuration .content select{
-  min-width: 25%;
-  margin-right: 60%;
-  float: right;
+.gameTitleContainer .configuration .content div {
+  margin-top: 0.5rem;
+}
+
+.gameTitleContainer .configuration .content div select{
+  min-width: 60%;
 }

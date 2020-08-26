@@ -50,14 +50,14 @@ function GameTitleStep(props: Props) {
 
       <Collapse header="configuration" className="configuration">
         <div className="lang">
-          <span>language</span>
+          <div>language</div>
           <select name="lang" id="lang" ref={langRef}>
             <option value="fr">français</option>
             <option value="en">english</option>
           </select>
         </div>
         <div className="difficulty">
-          <span>difficulty</span>
+          <div>difficulty</div>
           <select name="difficulty" id="difficulty" ref={difficultyRef}>
             <option value="débutant">easy</option>
             <option value="confirmé">normal</option>
@@ -65,7 +65,7 @@ function GameTitleStep(props: Props) {
           </select>
         </div>
         <div className="quizName">
-          <span>quiz</span>
+          <div>quiz</div>
           <select name="quiz" id="quiz" ref={quizRef}>
             <option value="culturegenerale">culturegenerale</option>
             <option value="culturegenerale2">culturegenerale2</option>

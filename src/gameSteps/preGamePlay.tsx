@@ -35,18 +35,7 @@ function PreGamePlay(props: Props) {
         props.setCurrentQuestionIndex(props.currentQuestionIndex + 1);
       }
     );
-    props.HubConnection.on("winnerName", r => {
-      if (!unmounted) 
-        props.setPlayers((prevObject: any)=>{
-            prevObject![r.playerName] =prevObject![r.playerName]+1 ;
-            return prevObject;
-        })
 
-    });
-    props.HubConnection.on("NewQuestion", r => {
-      if (!unmounted) 
-      props.setQuizData(r);
-    });
     props.HubConnection.on("receiveFakeAnswer", r => {
       if (!unmounted) 
 {      setFakeAnswersNb(oldValue => oldValue + 1);

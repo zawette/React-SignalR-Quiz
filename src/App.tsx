@@ -56,6 +56,16 @@ function App() {
             return prevObject;
           });
         });
+        hubConnection.on("winnerName", r => {
+          setPlayers((prevObject: any)=>{
+              prevObject![r.playerName] =prevObject![r.playerName]+1 ;
+              return prevObject;
+          })
+      });
+      hubConnection.on("NewQuestion", r => {
+        setQuizData(r);
+      });
+
       })
       .catch(err => console.log(err));
   }, []);
