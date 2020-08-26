@@ -60,6 +60,11 @@ function App() {
       .catch(err => console.log(err));
   }, []);
 
+useEffect(()=>{
+if(currentQuestionIndex===MaxQuestions)
+setStep(steps.GAME_OVER)
+},[currentQuestionIndex])
+
   const Rendergame = () => {
     switch (step) {
       case steps.GAME_TITLE:
@@ -116,7 +121,7 @@ function App() {
         );
 
       case steps.GAME_OVER:
-        return <div>GameOver</div>;
+        return <div style={{color:"white"}}>GameOver</div>;
     }
   };
 
