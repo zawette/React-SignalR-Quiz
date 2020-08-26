@@ -20,7 +20,7 @@ function App() {
   const [currentPlayer, setCurrentPlayer] = useState("");
   const [hubConnection, setHubConnection] = useState(
     new HubConnectionBuilder()
-      .withUrl(`http://e9f2a2eb2025.ngrok.io/QuizHub`)
+      .withUrl(`http://22b0c6614c59.ngrok.io/QuizHub`)
       .build()
   );
 

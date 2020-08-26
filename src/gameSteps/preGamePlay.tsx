@@ -27,12 +27,16 @@ function PreGamePlay(props: Props) {
     props.HubConnection.invoke("sendFakeAnswer", fakeAnswer);
   };
   useEffect(() => {
+    let unmounted=false;
+
     props.HubConnection.invoke("GetQuestion", props.currentQuestionIndex).then(
       () => {
+        if (!unmounted) 
         props.setCurrentQuestionIndex(props.currentQuestionIndex + 1);
       }
     );
     props.HubConnection.on("winnerName", r => {
+      if (!unmounted) 
         props.setPlayers((prevObject: any)=>{
             prevObject![r.playerName] =prevObject![r.playerName]+1 ;
             return prevObject;
@@ -40,18 +44,23 @@ function PreGamePlay(props: Props) {
 
     });
     props.HubConnection.on("NewQuestion", r => {
+      if (!unmounted) 
       props.setQuizData(r);
     });
     props.HubConnection.on("receiveFakeAnswer", r => {
-      setFakeAnswersNb(oldValue => oldValue + 1);
+      if (!unmounted) 
+{      setFakeAnswersNb(oldValue => oldValue + 1);
       props.setQuizData(
-        (oldValue:IquizData) => {
-          oldValue.propositions.push(r.fakeAnswer);
-          shuffleArray(oldValue.propositions)
-          return oldValue;
+        (oldData:IquizData) => {
+          let temparray = [...oldData.propositions,r.fakeAnswer]
+          shuffleArray(temparray)
+          oldData.propositions=temparray;
+          return oldData;
         }
-      );
+      );}
     });
+    return ()=>{unmounted=true};
+
   }, []);
 
 
